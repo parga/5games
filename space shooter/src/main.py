@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 from os.path import join
 
 pygame.init()
@@ -15,6 +16,7 @@ y = 150
 
 player_surface = pygame.image.load(join("images", "player.png")).convert_alpha()
 start_surface = pygame.image.load(join("images", "star.png")).convert_alpha()
+start_positions = [(randint(0, WINDOW_WIDTH), randint(0, WIDOW_HEIGHT)) for _ in range(20)]
 
 while running:
     # event loop
@@ -27,7 +29,10 @@ while running:
     display_surface.fill("darkgray")
     x += 0.1
     display_surface.blit(player_surface, (x, y))
-    display_surface.blit(start_surface, (x+100, y))
+
+    for position in start_positions:
+        display_surface.blit(start_surface, position)
+
     pygame.display.update()
 
 pygame.quit()
