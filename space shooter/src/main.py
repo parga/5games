@@ -59,7 +59,6 @@ class Player(pygame.sprite.Sprite):
             if self.rect.left < 0:
                 self.rect.left = 0
 
-
 class Star(pygame.sprite.Sprite):
     def __init__(self, groups, surf):
         super().__init__(groups)
@@ -67,7 +66,6 @@ class Star(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(
             center=(randint(0, WINDOW_WIDTH), randint(0, WIDOW_HEIGHT))
         )
-
 
 class Laser(pygame.sprite.Sprite):
     def __init__(self, surf, pos, groups):
@@ -80,7 +78,6 @@ class Laser(pygame.sprite.Sprite):
             self.rect.centery -= 400 * dt
             if self.rect.bottom < 0:
                 self.kill()
-
 
 class Meteor(pygame.sprite.Sprite):
     def __init__(self, surf, groups):
@@ -115,6 +112,7 @@ laser_surface = pygame.image.load(join("images", "laser.png")).convert_alpha()
 
 # asset generation
 all_sprites = pygame.sprite.Group()
+meteor_sprites = pygame.sprite.Group()
 for i in range(20):
     Star(all_sprites, star_surf)
 player = Player(all_sprites)
@@ -133,14 +131,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == meteor_event:
-            Meteor(meteor_surface, all_sprites)
+            Meteor(meteor_surface, (all_sprites, meteor_sprites))
 
     # update
     all_sprites.update(dt)
+    pygame.sprite.spritecollide(player, meteor_sprites, False)
 
     # draw the game
     display_surface.fill("darkgray")
     all_sprites.draw(display_surface)
+
+    #check collision
+
     pygame.display.update()
 
 pygame.quit()
